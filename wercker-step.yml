@@ -1,5 +1,5 @@
 name: github-create-deployment
-version: 0.0.1
+version: 0.0.2
 description: wercker step for creating a GitHub deployment
 keywords:
   - GitHub
