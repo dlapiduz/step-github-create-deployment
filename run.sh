@@ -91,6 +91,11 @@ main() {
     fi
   fi
 
+  if [ -z "$export_id" ]; then
+    export_id="WERCKER_GITHUB_CREATE_DEPLOYMENT_ID";
+    info "no export id was supplied, using default value: $export_id";
+  fi
+
   info "started creating $environment deployment for $ref to GitHub repo $owner/$repo";
 
   # Create the deployment and save the output from curl
