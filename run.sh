@@ -32,8 +32,6 @@ create_deployment() {
 
   payload="{$payload}";
 
-  info "$payload";
-
   curl --fail -s -S -X POST https://api.github.com/repos/$owner/$repo/deployments \
     -A "wercker-create-deployment" \
     -H "Accept: application/vnd.github.cannonball-preview+json" \
@@ -53,6 +51,12 @@ export_id_to_env_var() {
   info "exporting deployment id ($id) to environment variable: \$$export_name";
 
   export $export_name=$id;
+}
+
+info() {
+  set -e;
+
+  echo "$1";
 }
 
 main() {
@@ -113,6 +117,8 @@ main() {
     "$description");
 
   info "finished creating $environment deployment for $ref to GitHub repo $owner/$repo";
+
+  info "$DEPLOY_RESPONSE";
 
   export_id_to_env_var "$DEPLOY_RESPONSE" "$export_id";
 
