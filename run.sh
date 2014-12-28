@@ -27,12 +27,12 @@ create_deployment() {
   fi;
 
   if [ -n "$description" ]; then
-    payload="$payload,\"description\":$description";
+    payload="$payload,\"description\":\"$description\"";
   fi;
 
   payload="{$payload}";
 
-  info $payload
+  info "$payload";
 
   curl --fail -s -S -X POST https://api.github.com/repos/$owner/$repo/deployments \
     -A "wercker-create-deployment" \
