@@ -10,6 +10,7 @@ create_deployment() {
   local deploy_payload="$7";
   local environment="$8";
   local description="$9";
+  local required_contexts="${10}";
 
   local payload="\"ref\":\"$ref\"";
   payload="$payload,\"task\":\"$task\"";
@@ -30,14 +31,18 @@ create_deployment() {
     payload="$payload,\"description\":\"$description\"";
   fi;
 
+  payload="$payload,\"required_contexts\":[$required_contexts]";
+
   payload="{$payload}";
 
-  curl --fail -s -S -X POST https://api.github.com/repos/$owner/$repo/deployments \
+  curl -X POST https://api.github.com/repos/$owner/$repo/deployments \
     -A "wercker-create-deployment" \
     -H "Accept: application/vnd.github.cannonball-preview+json" \
     -H "Authorization: token $token" \
     -H "Content-Type: application/json" \
     -d "$payload";
+
+
 }
 
 export_id_to_env_var() {
@@ -53,12 +58,6 @@ export_id_to_env_var() {
   export $export_name=$id;
 }
 
-info() {
-  set -e;
-
-  echo "$1";
-}
-
 main() {
   set -e;
 
@@ -71,6 +70,7 @@ main() {
   local environment="$WERCKER_GITHUB_CREATE_DEPLOYMENT_ENVIRONMENT";
   local description="$WERCKER_GITHUB_CREATE_DEPLOYMENT_DESCRIPTION";
   local export_id="$WERCKER_GITHUB_CREATE_DEPLOYMENT_EXPORT_ID";
+  local required_contexts="$WERCKER_GITHUB_CREATE_DEPLOYMENT_REQUIRED_CONTEXTS";
 
   local owner="$WERCKER_GIT_OWNER";
   local repo="$WERCKER_GIT_REPOSITORY";
@@ -114,7 +114,8 @@ main() {
     "$auto_merge" \
     "$payload" \
     "$environment" \
-    "$description");
+    "$description" \
+    "$required_contexts");
 
   info "finished creating $environment deployment for $ref to GitHub repo $owner/$repo";
 
