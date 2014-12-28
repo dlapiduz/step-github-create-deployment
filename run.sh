@@ -15,7 +15,7 @@ create_deployment() {
   payload="$payload,\"task\":\"$task\"";
 
   if [ -n "$auto_merge" ]; then
-    payload="$payload,\"auto_merge\":\"$auto_merge\"";
+    payload="$payload,\"auto_merge\":$auto_merge";
   fi;
 
   if [ -n "$deploy_payload" ]; then
