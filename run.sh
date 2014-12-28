@@ -32,6 +32,8 @@ create_deployment() {
 
   payload="{$payload}";
 
+  info $payload
+
   curl --fail -s -S -X POST https://api.github.com/repos/$owner/$repo/deployments \
     -A "wercker-create-deployment" \
     -H "Accept: application/vnd.github.cannonball-preview+json" \
