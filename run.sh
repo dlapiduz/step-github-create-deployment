@@ -72,8 +72,8 @@ main() {
   local export_id="$WERCKER_GITHUB_CREATE_DEPLOYMENT_EXPORT_ID";
   local required_contexts="$WERCKER_GITHUB_CREATE_DEPLOYMENT_REQUIRED_CONTEXTS";
 
-  local owner="$WERCKER_GIT_OWNER";
-  local repo="$WERCKER_GIT_REPOSITORY";
+  local owner="$WERCKER_GITHUB_CREATE_DEPLOYMENT_OWNER";
+  local repo="$WERCKER_GITHUB_CREATE_DEPLOYMENT_REPOSITORY";
 
   # Validate variables
   if [ -z "$token" ]; then
@@ -85,11 +85,20 @@ main() {
     info "Ref not specified; using default";
   fi
 
+  if [ -z "$owner" ]; then
+    owner="$WERCKER_GIT_OWNER"
+    info "Owner not specified; using default";
+  fi
+
+  if [ -z "$repo" ]; then
+    repo="$WERCKER_GIT_REPOSITORY"
+    info "Repo not specified; using default";
+  fi
+
   if [ -z "$task" ]; then
     task="deploy"
     info "Task not specified; using default: $task";
   fi
-
 
   if [ -n "$auto_merge" ]; then
     if [ "$auto_merge" != "false" ] && [ "$auto_merge" != "true" ]; then
